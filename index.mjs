@@ -91,6 +91,30 @@ export function normaliseUser(user) {
   };
 }
 
+export function getAllLanguages(users) {
+  const languages = new Set();
+  for (const user of users) {
+    for (const entry of user.languages) {
+      languages.add(entry.language);
+    }
+  }
+  return [...languages].sort();
+}
+
+function createOption(language) {
+  const option = document.createElement('option');
+  option.value = language;
+  option.textContent = language;
+  return option;
+}
+
+function populateDropDown(languages) {
+  resultDropDown.replaceChildren(createOption('overall'));
+  for (const language of languages) {
+    resultDropDown.append(createOption(language));
+  }
+}
+
 function renderResultsMessage(users, fetchedDetails) {
   const { invalidNames, unprocessedNames, failedNames } = fetchedDetails;
   let messages = [];
@@ -128,7 +152,13 @@ function renderResultsMessage(users, fetchedDetails) {
 function renderUserDetails(users, fetchedDetails) {
   results.hidden = false;
   renderResultsMessage(users, fetchedDetails);
+  populateDropDown(getAllLanguages(users));
+  showRankings(resultDropDown.value);
 }
+
+function populateTable(rows) {}
+
+function showRankings(option) {}
 
 //event listeners
 form.addEventListener('submit', handleSubmit);
