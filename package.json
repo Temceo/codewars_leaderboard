@@ -1,0 +1,20 @@
+{
+  "name": "project-codewards-leaderboard",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+  },
+  "dependencies": {
+    "jest": "^30.5.2"
+  },
+  "devDependencies": {
+    "jest-environment-jsdom": "^30.5.2"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "testMatch": [
+      "**/*.test.mjs"
+    ]
+  }
+}

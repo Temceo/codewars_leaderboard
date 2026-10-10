@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="index.mjs"></script>
+  <title>Codewars Leaderboard</title>
+</head>
+
+<body>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <main>
+    <h1>Codewars leader board</h1>
+    <form id="user-search">
+      <label for="list">Codewars username(s)</label>
+      <p id="username-help">Enter one or more usernames (case sensitive), separated by commas.</p>
+      <input type="text" name="list" id="list" aria-describedby="username-help" autocomplete="off" autocapitalize="none"
+        spellcheck="false" required>
+      <button type="submit">Find users</button>
+    </form>
+    <p id="results-message" aria-live="polite"></p>
+    <section class="users-info" aria-labelledby="results-heading" id="results" hidden>
+      <h2 id="results-heading">Results</h2>
+      <label for="result-dropdown">Rank results by</label>
+      <select name="result-dropdown" id="result-dropdown">
+        <option value="overall">Overall rating</option>
+      </select>
+      <table id="results-table">
+        <thead>
+          <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Clan</th>
+            <th scope="col">Rating</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+</body>
+
+</html>
