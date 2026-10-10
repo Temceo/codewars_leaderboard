@@ -22,7 +22,11 @@ export async function handleSubmit(e) {
   // remove duplicate values before fetching users from codewars
   const { fetchedDetails } = await fetchUsers([...new Set(userNames)]);
 
-  console.log(fetchedDetails);
+  currentUsers = fetchedDetails.fetchedUsers
+    .map(normaliseUser)
+    .sort((a, b) => b.overallScore - a.overallScore);
+
+  renderUserDetails(currentUsers, fetchedDetails);
 }
 
 export async function fetchUser(name) {
@@ -57,7 +61,7 @@ export async function fetchUsers(names) {
       }
 
       if (error.status === 404) {
-        fetchedDetails.invalidNames.push({ name, message: error.message });
+        fetchedDetails.invalidNames.push(name);
       } else {
         fetchedDetails.failedNames.push({ name, message: error.message });
       }
@@ -72,6 +76,58 @@ export async function fetchUsers(names) {
   }
 
   return { fetchedDetails };
+}
+
+export function normaliseUser(user) {
+  const languages = Object.entries(user.ranks?.languages ?? {}).map(
+    ([language, info]) => ({ language, score: info?.score ?? 0 })
+  );
+
+  return {
+    username: user.username,
+    clan: user.clan ?? null,
+    overallScore: user.ranks?.overall?.score ?? 0,
+    languages,
+  };
+}
+
+function renderResultsMessage(users, fetchedDetails) {
+  const { invalidNames, unprocessedNames, failedNames } = fetchedDetails;
+  let messages = [];
+
+  if (users.length === 0) {
+    messages.push('No users found.');
+  } else if (users.length === 1) {
+    messages.push('1 user found.');
+  } else {
+    messages.push(`${users.length} users found.`);
+  }
+  if (invalidNames.length === 1) {
+    messages.push(`${invalidNames[0]} is an invalid username`);
+  } else if (invalidNames.length > 1) {
+    const last = invalidNames.at(-1);
+    const allButLast = invalidNames.slice(0, -1).join(', ');
+    messages.push(`${allButLast} and ${last} are invalid usernames`);
+  }
+
+  if (unprocessedNames.length > 0) {
+    messages.push(
+      `Could not process due to too many calls: ${fetchedDetails.unprocessedNames.map(({ name, error }) => `${name}: ${error}`).join(', ')}`
+    );
+  }
+
+  if (failedNames.length > 0) {
+    messages.push(
+      `Failed to process these names: ${fetchedDetails.failedNames.map(({ name, error }) => `${name}: ${error}`).join(', ')}`
+    );
+  }
+
+  resultsMessage.textContent = messages.join('\n');
+}
+
+function renderUserDetails(users, fetchedDetails) {
+  results.hidden = false;
+  renderResultsMessage(users, fetchedDetails);
 }
 
 //event listeners
