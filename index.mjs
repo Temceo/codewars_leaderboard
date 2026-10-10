@@ -156,12 +156,51 @@ function renderUserDetails(users, fetchedDetails) {
   showRankings(resultDropDown.value);
 }
 
-function populateTable(rows) {}
+function populateTable(rows) {
+  tableBody.replaceChildren();
 
-function showRankings(option) {}
+  for (const values of rows) {
+    const row = document.createElement('tr');
+
+    for (const value of values) {
+      const cell = document.createElement('td');
+      cell.textContent = value;
+      row.append(cell);
+    }
+    tableBody.append(row);
+  }
+}
+
+function showRankings(option) {
+  const rows = [];
+  for (const user of currentUsers) {
+    if (option === 'overall') {
+      rows.push([user.username, user.clan ?? '-', user.overallScore]);
+      continue;
+    }
+
+    const match = user.languages.find((entry) => entry.language === option);
+    if (match) {
+      rows.push([user.username, user.clan ?? '-', match.score]);
+    }
+  }
+
+  if (option !== 'overall') {
+    rows.sort((a, b) => b[2] - a[2]);
+  }
+  populateTable(rows);
+}
 
 //event listeners
 form.addEventListener('submit', handleSubmit);
+list.addEventListener('input', () => {
+  resultsMessage.textContent = '';
+  results.hidden = true;
+});
+
+resultDropDown.addEventListener('change', () => {
+  showRankings(resultDropDown.value);
+});
 
 // toast for error messages
 let toastTimeout;
