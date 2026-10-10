@@ -1,77 +1,80 @@
-# Project: Shared Bookmarks
+# Codewars Leaderboard project
 
-As developers, we spend a lot of time reading articles on the web and we often want to record useful links to come back to them later. It is fun to share your bookmarks with others so that they can find interesting and useful links too.
+Codewars provides [an API](https://dev.codewars.com/) that can be used to look up an individual user's rank and score.
 
-Here are some examples of bookmark sites:
+We will use this to build a leaderboard, similar to [the one on the Codewars website](https://www.codewars.com/users/leaderboard/ranks).
 
-- [Jason Kottke](https://kottke.org/)
-- [Jeremy Keith](https://adactio.com/links)
-- [Andy Baio](https://waxy.org/category/links/)
-- [Ali Smith](https://bookmarks.alasdairsmith.co.uk/)
-
-Your task is to write code which allows a user to save a link with a short description and share them with others.
-
-You should make a frontend, which displays a list of bookmarked links and the user's description. A user can create new bookmarks by submitting a form with the URL and the description. You should use HTML and JavaScript for this. We want to focus on your ability to create the correct logic and not spend time on creating the perfect UI. You are allowed to use CSS, but you are strongly advised to focus on the logic, and only add styling when you are finished. You will not get any credit for styling.
-
-## Supplied scaffolding
-
-We have supplied a few sample files in the repo to demonstrate how you can define functions in one file and use them from another file. Feel free to use these files in your solution if you want, or to just use them for inspiration for your own solution.
-
-Note that when running locally, in order to open a web page which uses modules, you must serve the directory over HTTP e.g. with https://www.npmjs.com/package/http-server - you can't open the `index.html` file using a `file://` URL.
-
-We have also provided a `storage.js` file, which contains four functions to help with data storage. `storage.js` is a file containing four functions:
-
-- `getUserIds()`: when called, returns an array of strings, each of which is a user id
-- `getData(userId)`: when called with a user id string as an argument, returns an array of objects, each of which represents a bookmark that belongs to the user
-- `setData(userId, data)`: when called with a user id string and a data object as arguments, it will store the data for the user. The object should contain information about the bookmark, such as the URL, title and description. The function does not return anything
-- `clearData(userId)`: when called with a user id string as an argument, it will clear any stored data associated with the user id. This is provided to help with development, and is not required in the final code
-
-**Note**: None of the storage functions perform any validation or de-duplication, so ensure that you are sending the correct data before storing it.
+Your task is to create a website which allows a user to input a list of Codewars users, fetch their scores from the API and then display them so that you can compare. You should **focus on HTML and JavaScript**. Some CSS is required for completing this task, but the website's design **is not the focus of the assessment**. We will assess you on correct logic. You don't need a perfect UI, and it's ok if your UI is incomplete.
 
 ## Requirements
 
 You must submit both a link to your GitHub repo, and a link to the deployed website. Your project must meet all [project submission requirements](https://curriculum.codeyourfuture.io/checkpoint/prep/#project-submission).
 
-Your project must be written in JavaScript (with HTML and CSS).
-
 Your website must be hosted on the internet, and must be automatically deployed when you merge changes to your GitHub repo.
 
-Your website must include a drop-down to select a user to display information for. When a user is selected, you must display the list of bookmarks for that user. If there are no bookmarks for the user, you should present a message explaining this.
+Your project must be written in JavaScript (with HTML and CSS).
 
-You **must not** implement any kind of authentication. Just a drop-down to choose which user’s information to display. You **must not** implement data storage yourself, as we have provided that for you.
+You must be able to explain every line of code in your project, even ones other people in your group wrote.
 
-After picking a user, your website should display the list of bookmarks in reverse chronological order. For each bookmark, it should display the title and description of the bookmark. The title should be hyperlink to the URL of the bookmark. The timestamp at which the bookmark was created should be displayed.
+You should assume that Codewars ranks will change in the future. So you **must not** pre-compute anything. Your code should always read the data and calculate results from scratch.
 
-Each bookmark should also have:
+Your website should display an input, allowing the user to add a comma-separated list of Codewars usernames (e.g. "CodeYourFuture,40thieves,SallyMcGrath") that they want to display on the leaderboard.
 
-- A button which, when clicked, copies the URL to the clipboard.
-- A like counter/button. When a bookmark is first saved, its like count should be 0. Each time a user clicks the like button, that number should go up by one, and be displayed. This like count should be persisted such that closing the page and coming back to it, it is preserved.
+You **must not** implement any kind of authentication or data storage. Just a form to pick which usernames to display on the leaderboard.
 
-Your website must include a form with text inputs for the URL, title, and description, and submit button that allows a user to add a new topic. This form must be accessible, so for example, a user using the keyboard should be able to submit it without using a mouse.
+When a user is happy with the list of usernames, they can trigger your website to fetch data from the [Get User endpoint of the Codewars API](https://dev.codewars.com/#get-user). Within this data, each user has a `ranks` property which should be used to calculate their ranking.
 
-After the new data has been stored, the updated list of bookmarks must be displayed (including the new bookmark) for the relevant user.
+Using the leaderboard ranking data, your website should calculate all of the possible languages that the users have a ranking in. Your website should show a drop-down allowing the user to pick from all of these language rankings, plus the overall ranking.
 
-The data should persist across sessions, so if you close your browser then re-open it and select the same user, the data must still be there. The data is not expected to be viewable from another computer - storage is only local.
+Your website should display a table for the ranking data that the user has selected from the drop-down. The table should default to showing the overall ranking if a language has not been selected yet. If the user selects another language from the drop-down, the table should show its ranking data.
 
-Your GitHub repository must contain unit tests which demonstrate that your code works. End to end tests are optional.
+The table should have columns for username, clan and score. Each user should have a row in the table showing their relevant data points for selected language ranking. The rows should be sorted so that the user with the highest score for the selected language ranking is at the top, and the user with the lowest score is at the bottom.
 
-Every view of your website must be accessible (i.e. for each user, whether or not they have bookmarks, etc). We will test this by making sure that "Snapshot" mode of Lighthouse gives 100% accessibility for any view we look at.
+If a user does not have a ranking for the currently selected language, the user should not be shown in the table.
+
+The user with the highest score should be highlighted in some (fun!) way so that their achievement can be celebrated.
+
+Your GitHub repository must contain unit tests which demonstrate that your code works.
+
+Every view of your website must be accessible (i.e. for each user, with any number of topics, etc). We will test this by making sure that "Snapshot" mode of Lighthouse gives 100% accessibility for any view we look at.
+
+### Supplied test scaffolding
+
+A test demonstrating the usage of the [nock testing library](https://github.com/nock/nock) has been provided for you. This library is helpful for replacing `fetch` calls with "mocked" data, allowing you to control the test fully.
+
+You **must** run `npm install` within the `Project-Codewars-Leaderboard` folder in order for the scaffolding to work.
+
+Running `npm test` (within the `Project-Codewars-Leaderboard` folder) will run the tests.
+
+You are welcome to use as much of the provided files as you want, or to ignore/delete them if you don't.
 
 ## Rubric
 
 All of the below requirements must be met for the project to be considered complete:
 
-- The website must contain a drop-down which lists five users
-- Selecting a user must display the list of bookmarks for the relevant user
-- If there are no bookmarks for the selected user, a message is displayed to explain this
-- The list of bookmarks must be shown in reverse chronological order
-- Each bookmark has a title, description and created at timestamp displayed
-- Each bookmark’s title is a link to the bookmark’s URL
-- Each bookmark's "Copy to clipboard" button must copy the URL of the bookmark
-- Each bookmark's like counter works independently, and persists data across sessions
-- The website must contain a form with inputs for a URL, a title, and a description. The form should have a submit button.
-- Submitting the form adds a new bookmark for the relevant user only
-- After creating a new bookmark, the list of bookmarks for the current user is shown, including the new bookmark
+- The website must contain an input to accept a comma-separated list of users
+- Submitting the list of users fetches data from the Codewars API about each of the users
+- Based on the leaderboard data, a drop-down is shown, allowing the user to pick from all of the possible language rankings plus the overall ranking
+- The default ranking selected is the overall ranking
+- A table is shown for the current ranking, with columns for each user's username, clan and score
+- Changing the selected ranking will update the table to reflect the newly selected ranking
+- The table is sorted from the highest to lowest score, top to bottom
+- Users without a ranking in a chosen language are not shown in that table
+- The top user's score is visually highlighted
 - The website must score 100% for accessibility in Lighthouse in the Desktop device mode, for all views in the website
 - Unit tests must be written for at least one non-trivial function
 - The project must not contain any dead code. All written JavaScript and CSS must be used.
+- Searching for a user which doesn't exist should show a message to the user explaining this.
+  - If multiple users were searched for, it is acceptable to either just error, or to show the valid users, but the user should be made aware of each of the invalid users.
+- If fetching from the Codewars API errors (e.g. because you're offline, or made a bad request), the user must be shown a useful error message in the UI.
+- Error messages should not make misleading claims about what went wrong, and it should be clear what the user should do about it to rectify the situation.
+
+Below is an example of a table showing the overall ranking for 3 users: CodeYourFuture, SallyMcGrath and 40thieves.
+
+| Username       | Clan           | Score |
+| -------------- | -------------- | ----- |
+| SallyMcGrath   | CodeYourFuture | 1079  |
+| CodeYourFuture | CodeYourFuture | 751   |
+| 40thieves      |                | 10    |
+
+Please note that the individual ranks/scores shown in the above table may not be accurate as they may change if new katas are completed by these accounts. To see up-to-date data, you can look it up in the API responses: [CodeYourFuture](https://www.codewars.com/api/v1/users/CodeYourFuture), [SallyMcGrath](https://www.codewars.com/api/v1/users/SallyMcGrath), [40thieves](https://www.codewars.com/api/v1/users/40thieves).
