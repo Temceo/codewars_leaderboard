@@ -63,15 +63,12 @@ export async function fetchUsers(names) {
       if (error.status === 404) {
         fetchedDetails.invalidNames.push(name);
       } else {
-        fetchedDetails.failedNames.push({ name, message: error.message });
+        fetchedDetails.failedNames.push(name);
       }
     }
     const failedNames = fetchedDetails.failedNames;
     if (failedNames.length > 0) {
-      const details = failedNames
-        .map(({ name, message }) => `${name} (${message})`)
-        .join(',');
-      showToast(`Failed to fetch: ${details}`);
+      showToast(`Failed to fetch: ${failedNames.join(', ')}`);
     }
   }
 
@@ -118,9 +115,11 @@ function populateDropDown(languages) {
 function renderResultsMessage(users, fetchedDetails) {
   const { invalidNames, unprocessedNames, failedNames } = fetchedDetails;
   let messages = [];
+  results.hidden = false;
 
   if (users.length === 0) {
     messages.push('No users found.');
+    results.hidden = true;
   } else if (users.length === 1) {
     messages.push('1 user found.');
   } else {
@@ -142,7 +141,7 @@ function renderResultsMessage(users, fetchedDetails) {
 
   if (failedNames.length > 0) {
     messages.push(
-      `Failed to process these names: ${fetchedDetails.failedNames.map(({ name, error }) => `${name}: ${error}`).join(', ')}`
+      `Failed to process these names: ${fetchedDetails.failedNames.join(', ')}`
     );
   }
 
