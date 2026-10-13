@@ -8,7 +8,7 @@ document.body.innerHTML = readFileSync(
 
 const { fetchUser, fetchUsers, handleSubmit } = await import('./index.mjs');
 
-function apiUser(username, overall, languages = {}, clan = null) {
+function validUser(username, overall, languages = {}, clan = null) {
   const ranks = { overall: { score: overall }, languages: {} };
 
   for (const [name, score] of Object.entries(languages)) {
@@ -31,9 +31,9 @@ function mockApi(users, failedNames = []) {
   });
 }
 
-const alice = apiUser('alice', 100, { java: 50, javascript: 40 }, 'Team A');
-const martin = apiUser('martin', 200, { java: 40, javascript: 10 });
-const bob = apiUser('bob', 300, { javascript: 200 });
+const alice = validUser('alice', 100, { java: 50, javascript: 40 }, 'Team A');
+const martin = validUser('martin', 200, { java: 40, javascript: 10 });
+const bob = validUser('bob', 300, { javascript: 200 });
 
 afterEach(() => {
   delete global.fetch;
