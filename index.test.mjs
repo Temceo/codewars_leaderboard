@@ -79,7 +79,7 @@ test('submitting the form reports names that fail to fetch', async () => {
   await handleSubmit({ preventDefault() {} });
 
   expect(document.getElementById('results-message').textContent).toBe(
-    '1 user found.\nFailed to process these names: ///, ???'
+    '1 user found.\nFailed to fetch these names: ///, ???'
   );
   expect(document.getElementById('toast').textContent).toBe(
     'Failed to fetch: ///, ???'

@@ -45,8 +45,8 @@ export async function fetchUser(name) {
 export async function fetchUsers(names) {
   const fetchedDetails = {
     fetchedUsers: [],
-    invalidNames: [],
-    failedNames: [], // network, json errors etc
+    invalidNames: [], // invalid codewars usernames
+    failedNames: [], // CORS, network, json errors etc
     unprocessedNames: [], // not processed due to too many request
   };
 
@@ -141,7 +141,7 @@ function renderResultsMessage(users, fetchedDetails) {
 
   if (failedNames.length > 0) {
     messages.push(
-      `Failed to process these names: ${fetchedDetails.failedNames.join(', ')}`
+      `Failed to fetch these names: ${fetchedDetails.failedNames.join(', ')}`
     );
   }
 
