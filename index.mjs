@@ -47,7 +47,7 @@ export async function fetchUsers(names) {
     fetchedUsers: [],
     invalidNames: [], // invalid codewars usernames
     failedNames: [], // CORS, network, json errors etc
-    unprocessedNames: [], // not processed due to too many request
+    unprocessedNames: [], // not processed due to too many requests
   };
 
   for (const name of names) {
